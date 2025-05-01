@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Item
+  - Weapon
+  - Wall
+  - Arrow
   layers:
   - Default
   - TransparentFX
@@ -15,9 +18,9 @@ TagManager:
   - UI
   - Enemy
   - Item
-  - 
-  - 
-  - 
+  - Arrow
+  - Wall
+  - Weapon
   - 
   - 
   - 

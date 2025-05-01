@@ -5,6 +5,7 @@ public static class GameManager
     public static PlayerController player { get; private set; }
     public static CameraComponent cam { get; private set; }
     public static Weapon weapon { get; private set; }
+    public static EffectManager effect { get; private set; } = new EffectManager();
 
     public static void SetComponent(MonoBehaviour _component)
     {

@@ -3,8 +3,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour,
 IAwake
 {
-    protected bool isReady;
-    protected bool isAttack;
+    protected bool canAttack;
     protected Animator anim;
 
     public abstract int critical { get; protected set; }
@@ -13,11 +12,6 @@ IAwake
     public virtual void OnAwake() => anim = GetComponent<Animator>();
     public abstract void Ready();
     public abstract void Attack();
-
-    private void EndAttack()
-    {
-        //애니메이션 호출 메서드
-        isAttack = false;
-        isReady = false;
-    }
+    private void EndReady() => canAttack = true; //애니메이션 호출 메서드
+    private void EndAttack() => canAttack = false; //애니메이션 호출 메서드
 }

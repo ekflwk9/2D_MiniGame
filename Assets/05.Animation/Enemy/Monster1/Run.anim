@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Move
+  m_Name: Run
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,13 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 21300000, guid: 78b428acc428c0b408008ab5598e9d8c, type: 3}
+      value: {fileID: 21300000, guid: ca5b98bbebc5f934281c819823a9b963, type: 3}
     - time: 0.083333336
-      value: {fileID: 21300000, guid: 982c8220eb4c2a74794fec66eb014e02, type: 3}
+      value: {fileID: 21300000, guid: 3abf97ac7a775a846bae26d84d456646, type: 3}
     - time: 0.16666667
-      value: {fileID: 21300000, guid: 58a74aef780803040afca3955f7d977a, type: 3}
+      value: {fileID: 21300000, guid: b0fc4475572ac2b4191727f693b2fe46, type: 3}
     - time: 0.25
-      value: {fileID: 21300000, guid: 4f32ea04e0f5ad147beac903bc2ef5fb, type: 3}
+      value: {fileID: 21300000, guid: 26d3740abcaa3064c933f003e489f002, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -50,10 +50,10 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 21300000, guid: 78b428acc428c0b408008ab5598e9d8c, type: 3}
-    - {fileID: 21300000, guid: 982c8220eb4c2a74794fec66eb014e02, type: 3}
-    - {fileID: 21300000, guid: 58a74aef780803040afca3955f7d977a, type: 3}
-    - {fileID: 21300000, guid: 4f32ea04e0f5ad147beac903bc2ef5fb, type: 3}
+    - {fileID: 21300000, guid: ca5b98bbebc5f934281c819823a9b963, type: 3}
+    - {fileID: 21300000, guid: 3abf97ac7a775a846bae26d84d456646, type: 3}
+    - {fileID: 21300000, guid: b0fc4475572ac2b4191727f693b2fe46, type: 3}
+    - {fileID: 21300000, guid: 26d3740abcaa3064c933f003e489f002, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -78,11 +78,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0.25
-    functionName: OnEffect
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

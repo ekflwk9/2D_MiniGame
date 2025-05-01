@@ -19,4 +19,20 @@ public class Service
 
         return findChild;
     }
+
+    public static GameObject FindResource(string _name)
+    {
+        var findObject = Resources.Load<GameObject>(_name).gameObject;
+        if (findObject == null) Debug.Log($"{_name}은 존재하지 않는 무기종류");
+        
+        return findObject;
+    }
+
+    public static GameObject FindResource(string _fileName, string _name)
+    {
+        var findObject = Resources.Load<GameObject>($"{_fileName}/{_name}").gameObject;
+        if (findObject == null) Debug.Log($"{_name}은 존재하지 않는 임펙트");
+
+        return findObject;
+    }
 }

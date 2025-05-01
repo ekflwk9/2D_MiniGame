@@ -48,4 +48,6 @@ IAwake
         direction.x = _isLeft ? -1f : 1f;
         this.transform.localScale = direction;
     }
+
+    private void OnEffect() => GameManager.effect.On(this.transform.position,"Walk");
 }
