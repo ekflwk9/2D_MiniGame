@@ -42,16 +42,27 @@ public class Arrow : MonoBehaviour
         DestroyImmediate(this.gameObject);
     }
 
+    private void SetOff()
+    {
+        isFire = false;
+        rigid.linearVelocity = Vector2.zero;
+        this.transform.position = Vector3.one * 1000;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
-            isFire = false;
             GameManager.effect.On(this.transform.position, EffectCode.Arrow);
             GameManager.sound.OnEffect("ArrowHitWall");
 
-            rigid.linearVelocity = Vector2.zero;
-            this.transform.position = Vector3.one * 1000;
+            SetOff();
+        }
+
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            GameManager.gmaeEvent.Hit(collision.gameObject.name, 2);
+            SetOff();
         }
     }
 }

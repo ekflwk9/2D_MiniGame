@@ -5,6 +5,7 @@ public enum EffectCode
 {
     Arrow = 0,
     Walk = 1,
+    Blood = 2,
 }
 
 public class EffectManager

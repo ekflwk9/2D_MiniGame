@@ -6,6 +6,7 @@ IAwake
     protected bool canAttack;
     protected Animator anim;
 
+    public abstract float knockback { get; protected set; }
     public abstract int critical { get; protected set; }
     public abstract int dmg { get; protected set; }
 

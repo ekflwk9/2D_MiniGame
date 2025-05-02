@@ -3,6 +3,7 @@ using UnityEngine;
 public delegate void Func();
 public interface IAwake { public void OnAwake(); }
 public interface IStart { public void OnStart(); }
+public interface IHit { public void OnHit(int _dmg); }
 
 public class Service
 {
@@ -20,11 +21,20 @@ public class Service
         return findChild;
     }
 
+    public static float Distance(Vector2 _targetPos, Vector2 _startPos)
+    {
+        //홍대병 걸려버린 Distance구현
+        var distance = _targetPos - _startPos;
+        var resoult = (distance.x * distance.x) + (distance.y * distance.y);
+
+        return resoult < 0 ? resoult * -1 : resoult;
+    }
+
     public static GameObject FindResource(string _name)
     {
         var findObject = Resources.Load<GameObject>(_name).gameObject;
         if (findObject == null) Debug.Log($"{_name}은 존재하지 않는 무기종류");
-        
+
         return findObject;
     }
 

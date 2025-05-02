@@ -7,6 +7,7 @@ public static class GameManager
     public static Weapon weapon { get; private set; }
     public static SoundManager sound { get; private set; } = new SoundManager();
     public static EffectManager effect { get; private set; } = new EffectManager();
+    public static EventManager gmaeEvent { get; private set; } = new EventManager();
 
     public static void SetComponent(MonoBehaviour _component)
     {
@@ -15,5 +16,6 @@ public static class GameManager
         else if (_component is CameraComponent isCam) cam = isCam;
 
         sound.SetComponent(_component);
+        gmaeEvent.SetComponent(_component);
     }
 }

@@ -1,8 +1,9 @@
 public class Bow : Weapon
 {
+    private Arrow[] arrows;
+    public override float knockback { get; protected set; } = 2f;
     public override int critical { get; protected set; } = 5;
     public override int dmg { get; protected set; } = 2;
-    private Arrow[] arrows;
 
     public override void OnAwake()
     {
