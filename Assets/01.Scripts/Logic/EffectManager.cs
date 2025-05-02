@@ -1,34 +1,80 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+
+public enum EffectCode
+{
+    Arrow = 0,
+    Walk = 1,
+}
 
 public class EffectManager
 {
-    private Dictionary<string, GameObject> effect = new Dictionary<string, GameObject>();
+    //배열로 딕셔너리처럼 도전 !
+    private GameObject[][] effects;
 
     public void Load()
     {
-        var effects = Resources.LoadAll<GameObject>("Effect");
+        var resource = Resources.LoadAll<GameObject>("Effect");
+        effects = new GameObject[resource.Length][];
 
-        for (int i = 0; i < effects.Length; i++)
+        for (int i = 0; i < resource.Length; i++)
         {
-            var gameObject = MonoBehaviour.Instantiate(effects[i]);
-            var component = gameObject.GetComponent<EffectTime>();
+            //Enum값 가져오기
+            var effectCode = EffectCode.Arrow;
+            if (!Enum.TryParse(resource[i].name, out effectCode)) Debug.Log($"{resource[i].name}은 EffectCode에 없는 이름");
 
-            if (component != null) component.SetTime();
-            else Debug.Log($"{effects[i]}는 EffectTime컴포넌트가 존재하지 않음");
+            //해당 오브젝트 Enum에 맞게 할당, 초기화
+            var length = resource.Length * 5;
+            var index = (int)effectCode;
+            effects[index] = new GameObject[length];
 
-            effect.Add(effects[i].name, gameObject);
+            //오브젝트 하나당 10개의 풀링을 갖게함
+            for (int I = 0; I < length; I++)
+            {
+                var gameObject = MonoBehaviour.Instantiate(resource[i]);
+                var component = gameObject.GetComponent<EffectTime>();
+
+                if (component != null) component.SetTime();
+                else Debug.Log($"{resource[i]}는 EffectTime컴포넌트가 존재하지 않음");
+
+                effects[index][I] = gameObject;
+                gameObject.SetActive(false);
+            }
         }
     }
 
-    public void On(Vector3 _spawnPos, string _effectName)
+    public void On(Vector3 _spawnPos, EffectCode _code)
     {
-        if (effect.ContainsKey(_effectName))
-        {
-            effect[_effectName].transform.position = _spawnPos;
-            effect[_effectName].SetActive(true);
-        }
+        var index = (int)_code;
+        var length = effects[index].Length;
 
-        else Debug.Log($"{_effectName}는 없는 에펙트");
+        //해당 오브젝트 배열 안에 꺼져있는 배열만 활성화
+        for (int i = 0; i < length; i++)
+        {
+            if (!effects[index][i].activeSelf)
+            {
+                effects[index][i].transform.position = _spawnPos;
+                effects[index][i].SetActive(true);
+                break;
+            }
+        }
+    }
+
+    public void On(Vector3 _spawnPos, Vector3 _direction, EffectCode _code)
+    {
+        var index = (int)_code;
+        var length = effects[index].Length;
+
+        //해당 오브젝트 배열 안에 꺼져있는 배열만 활성화
+        for (int i = 0; i < length; i++)
+        {
+            if (!effects[index][i].activeSelf)
+            {
+                effects[index][i].transform.position = _spawnPos;
+                effects[index][i].transform.localScale = _direction;
+                effects[index][i].SetActive(true);
+                break;
+            }
+        }
     }
 }

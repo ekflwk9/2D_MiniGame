@@ -6,6 +6,7 @@ IAwake
     private Animator anim;
     private Rigidbody2D rigid;
 
+    private Vector3 effectDirection = Vector3.one;
     private Vector3 direction = Vector3.one;
     private Vector3 pos;
     private float speed = 300f;
@@ -29,12 +30,12 @@ IAwake
         pos.y = 0f;
 
         //상하 조작
-        if(Input.GetKey(KeyCode.W)) pos.y = 1f;
-        else if(Input.GetKey(KeyCode.S)) pos.y = -1f;
+        if (Input.GetKey(KeyCode.W)) pos.y = 1f;
+        else if (Input.GetKey(KeyCode.S)) pos.y = -1f;
 
         //좌우 조작
-        if(Input.GetKey(KeyCode.A)) pos.x = -1f;
-        else if(Input.GetKey(KeyCode.D)) pos.x = 1f;
+        if (Input.GetKey(KeyCode.A)) pos.x = -1f;
+        else if (Input.GetKey(KeyCode.D)) pos.x = 1f;
 
         //애니메이션 조작
         if (pos != Vector3.zero) anim.SetBool("Move", true);
@@ -49,5 +50,12 @@ IAwake
         this.transform.localScale = direction;
     }
 
-    private void OnEffect() => GameManager.effect.On(this.transform.position,"Walk");
+    private void OnWalkEffect()
+    {
+        effectDirection.z = direction.x;
+        var effectPos = transform.position + Vector3.down * 0.8f;
+
+        GameManager.effect.On(effectPos, effectDirection, EffectCode.Walk);
+        GameManager.sound.OnEffect("Walk");
+    }
 }

@@ -1,16 +1,32 @@
 using UnityEngine;
 
-public class MusicSound : MonoBehaviour
+public class MusicSound : MonoBehaviour,
+IAwake
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private AudioSource source;
+
+    public void OnAwake()
     {
-        
+        source = this.gameObject.AddComponent<AudioSource>();
+
+        source.loop = false;
+        source.playOnAwake = false;
+        source.volume = 0.5f;
+
+        GameManager.SetComponent(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void On(AudioClip _sound)
     {
-        
+        if (_sound != null)
+        {
+            source.clip = _sound;
+            source.Play();
+        }
+
+        else
+        {
+            source.Stop();
+        }
     }
 }

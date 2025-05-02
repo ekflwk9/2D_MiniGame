@@ -47,6 +47,9 @@ public class Arrow : MonoBehaviour
         if (collision.gameObject.CompareTag("Wall"))
         {
             isFire = false;
+            GameManager.effect.On(this.transform.position, EffectCode.Arrow);
+            GameManager.sound.OnEffect("ArrowHitWall");
+
             rigid.linearVelocity = Vector2.zero;
             this.transform.position = Vector3.one * 1000;
         }
