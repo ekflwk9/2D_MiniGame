@@ -12,9 +12,12 @@ IStart
 
     private void Update()
     {
-        MoveMouse();
-        ClickDown();
-        ClickUp();
+        if (GameManager.player.health > 0)
+        {
+            MoveMouse();
+            ClickDown();
+            ClickUp();
+        }
     }
 
     private void MoveMouse()

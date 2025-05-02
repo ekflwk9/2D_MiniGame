@@ -61,7 +61,7 @@ public class EffectManager
         }
     }
 
-    public void On(Vector3 _spawnPos, Vector3 _direction, EffectCode _code)
+    public void OnEffect(Vector3 _spawnPos, Vector3 _direction, EffectCode _code)
     {
         var index = (int)_code;
         var length = effects[index].Length;

@@ -1,17 +1,24 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : MonoBehaviour,
+IDestroy
 {
     public bool isFire { get; private set; }
+    private int dmg;
+    private string targetName;
     private Rigidbody2D rigid;
 
-    public void SpawnArrow()
+    public void SpawnArrow(string _targetName, int _dmg)
     {
+        dmg = _dmg;
+        targetName = _targetName;
+
         rigid = GetComponent<Rigidbody2D>();
+        this.transform.position = Vector3.one * 1000;
 
         DontDestroyOnLoad(this.gameObject);
-        this.transform.position = Vector3.one * 1000;
+        GameManager.SetComponent(this);
     }
 
     public void Fire(Vector3 _firePos)
@@ -37,7 +44,7 @@ public class Arrow : MonoBehaviour
         isFire = true;
     }
 
-    public void Destroy()
+    public void OnDestroyHandler()
     {
         DestroyImmediate(this.gameObject);
     }
@@ -46,10 +53,10 @@ public class Arrow : MonoBehaviour
     {
         isFire = false;
         rigid.linearVelocity = Vector2.zero;
-        this.transform.position = Vector3.one * 1000;
+        this.transform.position = Vector3.down * 1000;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Wall"))
         {
@@ -59,9 +66,9 @@ public class Arrow : MonoBehaviour
             SetOff();
         }
 
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag(targetName))
         {
-            GameManager.gmaeEvent.Hit(collision.gameObject.name, 2);
+            GameManager.gameEvent.Hit(collision.gameObject.name, dmg);
             SetOff();
         }
     }

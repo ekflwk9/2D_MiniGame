@@ -1,21 +1,28 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class GameManager
 {
-    public static PlayerController player { get; private set; }
+    public static PlayerComponent player { get; private set; }
     public static CameraComponent cam { get; private set; }
     public static Weapon weapon { get; private set; }
     public static SoundManager sound { get; private set; } = new SoundManager();
     public static EffectManager effect { get; private set; } = new EffectManager();
-    public static EventManager gmaeEvent { get; private set; } = new EventManager();
+    public static EventManager gameEvent { get; private set; } = new EventManager();
 
     public static void SetComponent(MonoBehaviour _component)
     {
         if (_component is Weapon isWeapon) weapon = isWeapon;
-        else if (_component is PlayerController isPlayer) player = isPlayer;
+        else if (_component is PlayerComponent isPlayer) player = isPlayer;
         else if (_component is CameraComponent isCam) cam = isCam;
 
         sound.SetComponent(_component);
-        gmaeEvent.SetComponent(_component);
+        gameEvent.SetComponent(_component);
+    }
+
+    public static void ChangeScene(string _sceneName)
+    {
+        //gameEvent.Reset();
+        SceneManager.LoadScene(_sceneName);
     }
 }

@@ -1,16 +1,38 @@
 using UnityEngine;
 
-public class RangedMonster : MonoBehaviour
+public class RangedMonster : Monster
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Arrow[] arrows;
+
+    public override void OnStart()
     {
-        
+        base.OnStart();
+
+        var arrow = Service.FindResource("Weapon", "Arrow");
+        arrows = new Arrow[3];
+
+        for (int i = 0; i < arrows.Length; i++)
+        {
+            var gameObject = Instantiate(arrow);
+            arrows[i] = gameObject.GetComponent<Arrow>();
+            arrows[i].SpawnArrow("Player", 3);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Fire()
     {
-        
+        for (int i = 0; i < arrows.Length; i++)
+        {
+            if (!arrows[i].isFire)
+            {
+                arrows[i].Fire(this.transform.position);
+                break;
+            }
+        }
+    }
+
+    protected override void Move()
+    {
+
     }
 }

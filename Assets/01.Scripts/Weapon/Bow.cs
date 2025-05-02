@@ -16,7 +16,7 @@ public class Bow : Weapon
         {
             var gameObject = Instantiate(arrow);
             arrows[i] = gameObject.GetComponent<Arrow>();
-            arrows[i].SpawnArrow();
+            arrows[i].SpawnArrow("Enemy", 2);
         }
 
         //임시 무기 장착

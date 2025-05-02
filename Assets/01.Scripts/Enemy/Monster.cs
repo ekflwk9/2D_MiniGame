@@ -3,11 +3,17 @@ using UnityEngine;
 public abstract class Monster : MonoBehaviour,
 IStart, IHit
 {
+    [Header("몬스터 정보")]
     [SerializeField] protected int dmg;
     [SerializeField] protected int health;
-    [SerializeField] protected int moveSpeed;
+    [SerializeField] protected float knockback;
+    [SerializeField] protected float moveSpeed;
 
-    protected bool isAttack;
+    [Space(10f)]
+    [Header("블러드 임펙트 스폰 위치 조정")]
+    [SerializeField] protected Vector3 bloodPos;
+
+    protected bool isMove = true;
     protected Vector3 direction = Vector3.one;
 
     protected Transform target;
@@ -28,24 +34,37 @@ IStart, IHit
 
     protected abstract void Move();
 
-    protected abstract void Attack();
+    protected virtual void OnWalkEffect()
+    {
+        //애니메이터 호출 메서드
+        var effectPos = this.transform.position + bloodPos;
+        GameManager.effect.OnEffect(effectPos, direction, EffectCode.Walk);
+    }
 
-    private void EndAttack()
+    private void OnIdle()
     {
         //애니메이션 호출 메서드
-        isAttack = false;
+        isMove = true;
         anim.Play("Idle", 0, 0);
+        rigid.linearVelocity = Vector3.zero;
     }
 
     public virtual void OnHit(int _dmg)
     {
         health -= _dmg;
-        if (health <= 0) anim.Play("Dead", -1, 0);
+        isMove = false;
+        rigid.linearVelocity = (target.position - this.transform.position) * -knockback;
+
+        var effectPos = this.transform.position + bloodPos;
+        GameManager.effect.OnEffect(effectPos, direction, EffectCode.Blood);
+        GameManager.sound.OnEffect($"{this.name}Hit");
+
+        if (health > 0) anim.Play("Hit", 0, 0);
+        else this.gameObject.SetActive(false);     
     }
 
     private void Update()
     {
-        Move();
-        Attack();
+        if (isMove && GameManager.player.health > 0) Move();
     }
 }

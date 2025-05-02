@@ -4,6 +4,7 @@ public delegate void Func();
 public interface IAwake { public void OnAwake(); }
 public interface IStart { public void OnStart(); }
 public interface IHit { public void OnHit(int _dmg); }
+public interface IDestroy { public void OnDestroyHandler(); }
 
 public class Service
 {

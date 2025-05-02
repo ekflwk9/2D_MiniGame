@@ -4,13 +4,25 @@ using UnityEngine;
 public class EventManager
 {
     private Dictionary<string, IHit> hit = new Dictionary<string, IHit>();
+    private event Func destroy;
 
     public void SetComponent(MonoBehaviour _component)
     {
-        if(_component is IHit isHit)
+        if (_component is IHit isHit)
         {
             if (!hit.ContainsKey(_component.name)) hit.Add(_component.name, isHit);
         }
+
+        if (_component is IDestroy isDestroy)
+        {
+            destroy += isDestroy.OnDestroyHandler;
+        }
+    }
+
+    public void Reset()
+    {
+        hit.Clear();
+        destroy?.Invoke();
     }
 
     public void Hit(string _eventName, int _dmg = 0)
