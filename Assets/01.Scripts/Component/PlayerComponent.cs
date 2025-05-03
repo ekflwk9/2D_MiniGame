@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class PlayerComponent : MonoBehaviour,
-IAwake, IHit, IDestroy
+IHit, IDestroy
 {
     public int health { get; private set; } = 15;
     private float moveSpeed = 3.5f;
@@ -13,7 +13,7 @@ IAwake, IHit, IDestroy
     private Vector3 direction = Vector3.one;
     private Vector3 pos;
 
-    public void OnAwake()
+    private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();

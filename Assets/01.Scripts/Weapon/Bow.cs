@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Bow : Weapon
 {
@@ -8,9 +7,9 @@ public class Bow : Weapon
     public override int critical { get; protected set; } = 5;
     public override int dmg { get; protected set; } = 2;
 
-    public override void OnAwake()
+    protected override void Awake()
     {
-        base.OnAwake();
+        base.Awake();
 
         var arrow = Service.FindResource("Weapon", "Arrow");
         arrows = new Arrow[20];

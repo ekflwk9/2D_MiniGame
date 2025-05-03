@@ -1,11 +1,10 @@
 using UnityEngine;
 
-public class MusicSound : MonoBehaviour,
-IAwake
+public class MusicSound : MonoBehaviour
 {
     private AudioSource source;
 
-    public void OnAwake()
+    private void Awake()
     {
         source = this.gameObject.AddComponent<AudioSource>();
 

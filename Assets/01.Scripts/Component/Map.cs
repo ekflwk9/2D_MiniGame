@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class Map : MonoBehaviour,
-IStart
+public class Map : MonoBehaviour
 {
     [Header("¸Ê ¹üÀ§")]
     [SerializeField] private Vector2 fieldRange;
@@ -13,8 +12,9 @@ IStart
         Gizmos.DrawWireCube(this.transform.position, fieldRange);
     }
 
-    public void OnStart()
+    private void Start()
     {
+        GameManager.cam.SetRange(range);
         GameManager.sound.OnMusic(this.name);
         GameManager.SetComponent(this);
     }

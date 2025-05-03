@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HpWindow : MonoBehaviour,
-IStart, IConstEvent
+IConstEvent
 {
     private Slider slider;
     private TMP_Text hpText;
 
-    public void OnStart()
+    private void Start()
     {
         slider = GetComponent<Slider>();
         hpText = Service.FindChild(this.transform, "HpText").GetComponent<TMP_Text>();

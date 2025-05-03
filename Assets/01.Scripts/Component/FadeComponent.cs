@@ -1,13 +1,12 @@
 using System.Text;
 using UnityEngine;
 
-public class FadeComponent : MonoBehaviour,
-IAwake
+public class FadeComponent : MonoBehaviour
 {
     private Animator anim;
     private StringBuilder eventName = new StringBuilder(30);
 
-    public void OnAwake() => anim = GetComponent<Animator>();
+    private void Awake() => anim = GetComponent<Animator>();
 
     public void OnFade(string _eventName, bool _fadeOut = false, float _fadeSpeed = 1f)
     {

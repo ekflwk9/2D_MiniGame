@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public abstract class Monster : MonoBehaviour,
-IStart, IHit
+IHit
 {
     [Header("몬스터 정보")]
     [SerializeField] protected int dmg;
@@ -16,15 +16,18 @@ IStart, IHit
 
     private int maxHealth;
     protected bool isMove = true;
+    private string monsterName;
     protected Vector3 direction = Vector3.one;
 
     protected Transform target;
     protected Animator anim;
     protected Rigidbody2D rigid;
 
-    public virtual void OnStart()
+    public virtual void SetMonster()
     {
         maxHealth = health;
+        target = GameManager.player.transform;
+        monsterName = this.GetType().Name;
 
         anim = GetComponent<Animator>();
         if (anim == null) Debug.Log($"{this.name}에 애니메이터가 존재하지 않음");
@@ -32,8 +35,8 @@ IStart, IHit
         rigid = GetComponent<Rigidbody2D>();
         if (rigid == null) Debug.Log($"{this.name}에 Rigidbody2D가 존재하지 않음");
 
-        target = GameManager.player.transform;
         GameManager.SetComponent(this);
+        this.gameObject.SetActive(false);
     }
 
     protected virtual void OnWalk()
@@ -41,7 +44,6 @@ IStart, IHit
         //애니메이터 호출 메서드
         var effectPos = this.transform.position + bloodPos;
         GameManager.effect.OnEffect(effectPos, direction, EffectCode.Walk);
-        GameManager.sound.OnEffect("Walk");
     }
 
     protected virtual void OnIdle()
@@ -58,7 +60,7 @@ IStart, IHit
 
         var effectPos = this.transform.position + bloodPos;
         GameManager.effect.OnEffect(effectPos, direction, EffectCode.Blood);
-        GameManager.sound.OnEffect($"{this.name}Hit");
+        GameManager.sound.OnEffect(monsterName);
 
         if (health > 0)
         {
@@ -75,6 +77,8 @@ IStart, IHit
 
             health = maxHealth;
             this.gameObject.SetActive(false);
+
+            GameManager.gameEvent.GameEvent("UpStage");
         }
     }
 

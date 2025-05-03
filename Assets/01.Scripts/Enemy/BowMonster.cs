@@ -4,9 +4,9 @@ public class BowMonster : Monster
 {
     private Arrow[] arrows;
 
-    public override void OnStart()
+    public override void SetMonster()
     {
-        base.OnStart();
+        base.SetMonster();
 
         var arrow = Service.FindResource("Weapon", "Arrow");
         arrows = new Arrow[3];
