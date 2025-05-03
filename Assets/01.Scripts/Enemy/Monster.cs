@@ -73,12 +73,14 @@ IHit
         {
             isMove = true;
             rigid.linearVelocity = Vector3.zero;
+            anim.SetBool("Move", false);
             anim.Play("Idle", 0, 0);
 
             health = maxHealth;
             this.gameObject.SetActive(false);
 
             GameManager.gameEvent.GameEvent("UpStage");
+            GameManager.gameEvent.GameEvent("KillCount");
         }
     }
 

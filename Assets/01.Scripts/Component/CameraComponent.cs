@@ -16,6 +16,8 @@ public class CameraComponent : MonoBehaviour
         if (target == null) Debug.Log("플레이어가 존재하지 않음");
 
         size = new Vector2(17.78f, 10f);
+        this.transform.position = target.transform.position;
+
         GameManager.SetComponent(this);
     }
 
@@ -29,20 +31,20 @@ public class CameraComponent : MonoBehaviour
 
             //카메라 위치 + 카메라 사이즈
             var camSize = size * 0.5f;
-            var right = nextPos + camSize;
-            var left = nextPos + (camSize * -1);
+            var posVal = nextPos + camSize;
+            var negVal = nextPos + (camSize * -1);
 
             //맵 사이즈
-            var rightRange = range * 0.5f;
-            var leftRange = range * -0.5f;
+            var posRange = range * 0.5f;
+            var negRange = range * -0.5f;
 
             //x축 검사
-            if (right.x > rightRange.x) nextPos.x = rightRange.x - camSize.x;
-            else if (left.x < leftRange.x) nextPos.x = leftRange.x + camSize.x;
+            if (posVal.x > posRange.x) nextPos.x = posRange.x - camSize.x;
+            else if (negVal.x < negRange.x) nextPos.x = negRange.x + camSize.x;
 
             //y축 검사
-            if (right.y > rightRange.y) nextPos.y = rightRange.y - camSize.y;
-            else if (left.y < leftRange.y) nextPos.y = leftRange.y + camSize.y;
+            if (posVal.y > posRange.y) nextPos.y = posRange.y - camSize.y;
+            else if (negVal.y < negRange.y) nextPos.y = negRange.y + camSize.y;
 
             //위치 설정
             this.transform.position = nextPos;
