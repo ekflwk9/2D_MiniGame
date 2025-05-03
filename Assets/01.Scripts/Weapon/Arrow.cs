@@ -7,27 +7,29 @@ IDestroy
     public bool isFire { get; private set; }
     private int dmg;
     private string targetName;
+    private float speed;
     private Rigidbody2D rigid;
 
-    public void SpawnArrow(string _targetName, int _dmg)
+    public void SpawnArrow(string _targetName, int _dmg, float _speed, bool _isPooling = false)
     {
         dmg = _dmg;
         targetName = _targetName;
+        speed = _speed;
 
         rigid = GetComponent<Rigidbody2D>();
         this.transform.position = Vector3.one * 1000;
 
-        DontDestroyOnLoad(this.gameObject);
+        if(_isPooling) DontDestroyOnLoad(this.gameObject);
         GameManager.SetComponent(this);
     }
 
-    public void Fire(Vector3 _firePos)
+    public void Fire(Vector3 _targetPos, Vector3 _firePos)
     {
         //위치 설정
         this.transform.position = _firePos;
 
         //현재 마우스 위치
-        var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var target = _targetPos;
         _firePos.x = target.x - _firePos.x;
         _firePos.y = target.y - _firePos.y;
 
@@ -40,7 +42,7 @@ IDestroy
         this.transform.rotation = Quaternion.Euler(0, 0, deg);
 
         //발사
-        rigid.linearVelocity = _firePos.normalized * 15f;
+        rigid.linearVelocity = _firePos.normalized * speed;
         isFire = true;
     }
 

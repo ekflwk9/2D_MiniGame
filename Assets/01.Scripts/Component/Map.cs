@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class MapRange : MonoBehaviour,
-IAwake
+public class Map : MonoBehaviour,
+IStart
 {
     [Header("¸Ê ¹üÀ§")]
-    [SerializeField] private Vector2 range;
+    [SerializeField] public Vector2 range { get; private set; }
 
     private void OnDrawGizmos()
     {
@@ -12,8 +12,9 @@ IAwake
         Gizmos.DrawWireCube(this.transform.position, range);
     }
 
-    public void OnAwake()
+    public void OnStart()
     {
+        GameManager.sound.OnMusic(this.name);
         GameManager.SetComponent(this);
     }
 }

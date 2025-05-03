@@ -4,6 +4,7 @@ using UnityEngine;
 public class EventManager
 {
     private Dictionary<string, IHit> hit = new Dictionary<string, IHit>();
+    private Dictionary<string, IGameEvent> gameEvent = new Dictionary<string, IGameEvent>();
     private event Func destroy;
 
     public void SetComponent(MonoBehaviour _component)

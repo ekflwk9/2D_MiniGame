@@ -23,7 +23,7 @@ IAwake, IHit, IDestroy
 
     private void Update()
     {
-        if(health > 0) Move();
+        Move();
     }
 
     private void Move()
@@ -64,17 +64,12 @@ IAwake, IHit, IDestroy
     public void OnHit(int _dmg)
     {
         health -= _dmg;
+
+        GameManager.sound.OnEffect("PlayerHit");
         GameManager.effect.On(this.transform.position, EffectCode.Blood);
+        GameManager.cam.HitShake();
 
-        if (health > 0)
-        {
-            GameManager.sound.OnEffect("PlayerHit");
-        }
-
-        else
-        {
-            //GameManager.gmaeEvent.
-        }
+        if (health <= 0) this.gameObject.SetActive(false); 
     }
 
     public void OnDestroyHandler()

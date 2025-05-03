@@ -18,6 +18,12 @@ IStart
     private void Update()
     {
         //내 위치 => 플레이어 위치 추적
-        this.transform.position = Vector3.Lerp(this.transform.position, target.transform.position, 0.015f);
+        if (target != null)
+        {
+            this.transform.position = Vector3.Lerp(this.transform.position, target.transform.position, 0.015f);
+        }
     }
+
+    public void Shake() => anim.Play("Shake", 0, 0);
+    public void HitShake() => anim.Play("Hit", 0, 0);
 }

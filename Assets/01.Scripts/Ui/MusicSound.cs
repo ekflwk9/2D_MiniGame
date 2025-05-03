@@ -9,7 +9,7 @@ IAwake
     {
         source = this.gameObject.AddComponent<AudioSource>();
 
-        source.loop = false;
+        source.loop = true;
         source.playOnAwake = false;
         source.volume = 0.5f;
 

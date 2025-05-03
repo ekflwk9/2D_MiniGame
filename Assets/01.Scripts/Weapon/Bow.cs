@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
 public class Bow : Weapon
 {
     private Arrow[] arrows;
@@ -16,7 +19,7 @@ public class Bow : Weapon
         {
             var gameObject = Instantiate(arrow);
             arrows[i] = gameObject.GetComponent<Arrow>();
-            arrows[i].SpawnArrow("Enemy", 2);
+            arrows[i].SpawnArrow("Enemy", 2, 15f, true);
         }
 
         //임시 무기 장착
@@ -35,11 +38,13 @@ public class Bow : Weapon
 
         anim.Play("Attack", -1, 0);
 
+        var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
         for (int i = 0; i < arrows.Length; i++)
         {
             if (!arrows[i].isFire)
             {
-                arrows[i].Fire(this.transform.position);
+                arrows[i].Fire(target, this.transform.position);
                 break;
             }
         }

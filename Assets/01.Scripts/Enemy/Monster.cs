@@ -13,6 +13,7 @@ IStart, IHit
     [Header("블러드 임펙트 스폰 위치 조정")]
     [SerializeField] protected Vector3 bloodPos;
 
+    private int maxHealth;
     protected bool isMove = true;
     protected Vector3 direction = Vector3.one;
 
@@ -22,6 +23,8 @@ IStart, IHit
 
     public virtual void OnStart()
     {
+        maxHealth = health;
+
         anim = GetComponent<Animator>();
         if (anim == null) Debug.Log($"{this.name}에 애니메이터가 존재하지 않음");
 
@@ -32,13 +35,19 @@ IStart, IHit
         GameManager.SetComponent(this);
     }
 
+    public virtual void Respawn()
+    {
+        health = maxHealth;
+    }
+
     protected abstract void Move();
 
-    protected virtual void OnWalkEffect()
+    protected virtual void OnWalk()
     {
         //애니메이터 호출 메서드
         var effectPos = this.transform.position + bloodPos;
         GameManager.effect.OnEffect(effectPos, direction, EffectCode.Walk);
+        GameManager.sound.OnEffect("Walk");
     }
 
     private void OnIdle()
