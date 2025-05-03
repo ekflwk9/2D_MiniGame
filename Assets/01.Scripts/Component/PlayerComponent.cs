@@ -4,7 +4,7 @@ public class PlayerComponent : MonoBehaviour,
 IAwake, IHit, IDestroy
 {
     public int health { get; private set; } = 15;
-    private float moveSpeed = 300f;
+    private float moveSpeed = 3.5f;
 
     private Animator anim;
     private Rigidbody2D rigid;
@@ -23,7 +23,7 @@ IAwake, IHit, IDestroy
 
     private void Update()
     {
-        Move();
+        if (!GameManager.stopGame) Move();
     }
 
     private void Move()
@@ -43,7 +43,7 @@ IAwake, IHit, IDestroy
         if (pos != Vector3.zero) anim.SetBool("Move", true);
         else anim.SetBool("Move", false);
 
-        rigid.linearVelocity = pos.normalized * moveSpeed * Time.smoothDeltaTime;
+        rigid.linearVelocity = pos.normalized * moveSpeed;
     }
 
     public void Direction(bool _isLeft)
@@ -68,8 +68,13 @@ IAwake, IHit, IDestroy
         GameManager.sound.OnEffect("PlayerHit");
         GameManager.effect.On(this.transform.position, EffectCode.Blood);
         GameManager.cam.HitShake();
+        GameManager.gameEvent.ConstEvent("HpSlider");
 
-        if (health <= 0) this.gameObject.SetActive(false); 
+        if (health <= 0)
+        {
+            GameManager.stopGame = true;
+            this.gameObject.SetActive(false);
+        }
     }
 
     public void OnDestroyHandler()

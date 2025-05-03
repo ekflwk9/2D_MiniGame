@@ -6,6 +6,7 @@ public interface IStart { public void OnStart(); }
 public interface IHit { public void OnHit(int _dmg); }
 public interface IDestroy { public void OnDestroyHandler(); }
 public interface IGameEvent{ public void OnGameEvent(); }
+public interface IConstEvent{ public void OnConstEvent(); }
 
 public class Service
 {

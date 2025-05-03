@@ -6,8 +6,9 @@ IStart, IHit
     [Header("몬스터 정보")]
     [SerializeField] protected int dmg;
     [SerializeField] protected int health;
-    [SerializeField] protected float knockback;
     [SerializeField] protected float moveSpeed;
+    [SerializeField] protected float knockback;
+    [SerializeField] protected float attackRange;
 
     [Space(10f)]
     [Header("블러드 임펙트 스폰 위치 조정")]
@@ -35,13 +36,6 @@ IStart, IHit
         GameManager.SetComponent(this);
     }
 
-    public virtual void Respawn()
-    {
-        health = maxHealth;
-    }
-
-    protected abstract void Move();
-
     protected virtual void OnWalk()
     {
         //애니메이터 호출 메서드
@@ -50,7 +44,7 @@ IStart, IHit
         GameManager.sound.OnEffect("Walk");
     }
 
-    private void OnIdle()
+    protected virtual void OnIdle()
     {
         //애니메이션 호출 메서드
         isMove = true;
@@ -61,19 +55,56 @@ IStart, IHit
     public virtual void OnHit(int _dmg)
     {
         health -= _dmg;
-        isMove = false;
-        rigid.linearVelocity = (target.position - this.transform.position) * -knockback;
 
         var effectPos = this.transform.position + bloodPos;
         GameManager.effect.OnEffect(effectPos, direction, EffectCode.Blood);
         GameManager.sound.OnEffect($"{this.name}Hit");
 
-        if (health > 0) anim.Play("Hit", 0, 0);
-        else this.gameObject.SetActive(false);     
+        if (health > 0)
+        {
+            isMove = false;
+            rigid.linearVelocity = (target.position - this.transform.position) * -knockback;
+            anim.Play("Hit", 0, 0);
+        }
+
+        else
+        {
+            isMove = true;
+            rigid.linearVelocity = Vector3.zero;
+            anim.Play("Idle", 0, 0);
+
+            health = maxHealth;
+            this.gameObject.SetActive(false);
+        }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        if (isMove && GameManager.player.health > 0) Move();
+        if (isMove && !GameManager.stopGame) Move();
+    }
+
+    protected virtual void Move()
+    {
+        if (Service.Distance(target.position, transform.position) < attackRange)
+        {
+            rigid.linearVelocity = Vector2.zero;
+            anim.SetBool("Move", false);
+
+            isMove = false;
+            anim.Play("Attack", 0, 0);
+        }
+
+        else
+        {
+            anim.SetBool("Move", true);
+
+            //몬스터 보는 방향
+            direction.x = target.position.x < transform.position.x ? -1 : 1;
+            transform.localScale = direction;
+
+            //몬스터 이동 위치
+            var movePos = target.position - transform.position;
+            rigid.linearVelocity = movePos.normalized * moveSpeed;
+        }
     }
 }

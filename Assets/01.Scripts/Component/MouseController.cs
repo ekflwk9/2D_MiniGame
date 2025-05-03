@@ -12,7 +12,7 @@ IStart
 
     private void Update()
     {
-        if (GameManager.player.health > 0)
+        if (!GameManager.stopGame)
         {
             MoveMouse();
             ClickDown();

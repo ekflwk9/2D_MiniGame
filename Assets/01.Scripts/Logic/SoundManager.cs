@@ -36,6 +36,6 @@ public class SoundManager
     public void OnMusic(string _soundName)
     {
         if (sound.ContainsKey(_soundName)) music.On(sound[_soundName]);
-        else Debug.Log($"{_soundName}은 풀링 사운드에 없는 사운드");
+        else music.On(null);
     }
 }
