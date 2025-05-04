@@ -25,17 +25,17 @@ public static class GameManager
 
     public static void ChangeScene(string _sceneName)
     {
-        if (SceneManager.GetActiveScene().name != "GameOver")
+        if (_sceneName == "Loby")
+        {
+            gameEvent.Reset(true);
+        }
+
+        else
         {
             gameEvent.Reset(false);
             gameEvent.SetComponent(player);
 
             player.transform.position = Vector3.zero;
-        }
-
-        else
-        {
-            gameEvent.Reset(true);
         }
 
         SceneManager.LoadScene(_sceneName);

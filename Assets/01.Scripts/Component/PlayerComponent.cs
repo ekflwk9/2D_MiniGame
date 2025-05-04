@@ -8,6 +8,7 @@ IHit, IDestroy
 
     private Animator anim;
     private Rigidbody2D rigid;
+    private GameObject touchItem;
 
     private Vector3 effectDirection = Vector3.one;
     private Vector3 direction = Vector3.one;
@@ -18,12 +19,17 @@ IHit, IDestroy
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        DontDestroyOnLoad(this.gameObject);
         GameManager.SetComponent(this);
     }
 
     private void Update()
     {
-        if (!GameManager.stopGame) Move();
+        if (!GameManager.stopGame)
+        {
+            Move();
+            OnItem();
+        }
     }
 
     private void Move()
@@ -68,17 +74,50 @@ IHit, IDestroy
         GameManager.sound.OnEffect("PlayerHit");
         GameManager.effect.On(this.transform.position, EffectCode.Blood);
         GameManager.cam.HitShake();
-        GameManager.gameEvent.ConstEvent("HpSlider");
+        GameManager.gameEvent.Call("SetHpSlider");
 
         if (health <= 0)
         {
+            health = 15;
+            anim.SetBool("Move", false);
+
             GameManager.stopGame = true;
             this.gameObject.SetActive(false);
+
+            GameManager.fade.OnFade(FadeFunc, 0.3f);
         }
+    }
+
+    private void OnItem()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (touchItem != null)
+            {
+                GameManager.gameEvent.Call(touchItem.name);
+                touchItem = null;
+            }
+        }
+    }
+
+    private void FadeFunc()
+    {
+        GameManager.ChangeScene("Loby");
+        GameManager.stopGame = false;
     }
 
     public void OnDestroyHandler()
     {
-        DestroyImmediate(this.gameObject);
+        Destroy(this.gameObject);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item")) touchItem = collision.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item")) touchItem = null;
     }
 }

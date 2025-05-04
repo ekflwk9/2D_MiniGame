@@ -1,27 +1,36 @@
-using System.Text;
 using UnityEngine;
 
 public class FadeComponent : MonoBehaviour
 {
     private Animator anim;
-    private StringBuilder eventName = new StringBuilder(30);
+    private Func fadeFunc;
 
-    private void Awake() => anim = GetComponent<Animator>();
-
-    public void OnFade(string _eventName, bool _fadeOut = false, float _fadeSpeed = 1f)
+    private void Awake()
     {
-        eventName.Append(_eventName);
+        anim = GetComponent<Animator>();
+        GameManager.SetComponent(this);
+    }
+
+    public void OnFade(Func _fadeFunc, float _fadeSpeed = 1f)
+    {
+        fadeFunc = _fadeFunc;
         anim.SetFloat("Speed", _fadeSpeed);
-        anim.Play(_fadeOut ? "FadeOut" : "FadeIn", 0, 0);
+        anim.Play("FadeIn", 0, 0);
+    }
+
+    public void OnFade(float _fadeSpeed = 1f)
+    {
+        anim.SetFloat("Speed", _fadeSpeed);
+        anim.Play("FadeOut", 0, 0);
     }
 
     private void EndFade()
     {
         //애니메이션 호출 메서드
-        if(string.IsNullOrEmpty(eventName.ToString()))
+        if (fadeFunc != null)
         {
-            GameManager.gameEvent.GameEvent(eventName.ToString());
-            eventName.Clear();
-        } 
+            fadeFunc();
+            fadeFunc = null;
+        }
     }
 }

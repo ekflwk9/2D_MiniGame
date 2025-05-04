@@ -79,14 +79,17 @@ IHit
             health = maxHealth;
             this.gameObject.SetActive(false);
 
-            GameManager.gameEvent.GameEvent("UpStage");
-            GameManager.gameEvent.GameEvent("KillCount");
+            GameManager.gameEvent.Call("UpDifficulty");
+            GameManager.gameEvent.Call("UpKillCount");
         }
     }
 
     protected virtual void Update()
     {
-        if (isMove && !GameManager.stopGame) Move();
+        if (!GameManager.stopGame)
+        {
+            if (isMove) Move();
+        }
     }
 
     protected virtual void Move()

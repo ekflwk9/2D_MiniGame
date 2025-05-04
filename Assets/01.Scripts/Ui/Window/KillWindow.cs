@@ -1,8 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class KillWindow : MonoBehaviour,
-IGameEvent
+public class KillWindow : MonoBehaviour
 {
     private int killCount;
     private TMP_Text killText;
@@ -10,10 +9,12 @@ IGameEvent
     private void Awake()
     {
         killText = Service.FindChild(this.transform, "Text").GetComponent<TMP_Text>();
+
+        GameManager.gameEvent.Add(UpKillCount);
         GameManager.SetComponent(this);
     }
 
-    public void OnGameEvent()
+    private void UpKillCount()
     {
         killCount++;
         killText.text = $"Kill : {killCount}";

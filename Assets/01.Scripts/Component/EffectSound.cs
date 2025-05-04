@@ -26,7 +26,8 @@ public class EffectSound : MonoBehaviour
         soundCount++;
         if (soundCount >= source.Length) soundCount = 0;
 
-        source[soundCount].PlayOneShot(_sound);
+        source[soundCount].clip = _sound;
+        source[soundCount].Play();
         //AudioSettings.GetConfiguration().numRealVoices;
     }
 }

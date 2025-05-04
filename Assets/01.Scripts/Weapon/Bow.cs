@@ -27,14 +27,11 @@ public class Bow : Weapon
 
     public override void Ready()
     {
-
         anim.Play("Ready", -1, 0);
-
     }
 
     public override void Attack()
     {
-
         anim.Play("Attack", -1, 0);
 
         var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -47,6 +44,5 @@ public class Bow : Weapon
                 break;
             }
         }
-
     }
 }

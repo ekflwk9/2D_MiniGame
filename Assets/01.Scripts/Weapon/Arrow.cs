@@ -48,7 +48,7 @@ IDestroy
 
     public void OnDestroyHandler()
     {
-        DestroyImmediate(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     private void SetOff()

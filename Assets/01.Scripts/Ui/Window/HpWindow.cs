@@ -2,8 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HpWindow : MonoBehaviour,
-IConstEvent
+public class HpWindow : MonoBehaviour
 {
     private Slider slider;
     private TMP_Text hpText;
@@ -17,10 +16,12 @@ IConstEvent
         slider.value = GameManager.player.health;
 
         hpText.text = $"{slider.value} / {slider.maxValue}";
+
         GameManager.SetComponent(this);
+        GameManager.gameEvent.Add(SetHpSlider);
     }
 
-    public void OnConstEvent()
+    private void SetHpSlider()
     {
         slider.value = GameManager.player.health;
         hpText.text = $"{slider.value} / {slider.maxValue}";

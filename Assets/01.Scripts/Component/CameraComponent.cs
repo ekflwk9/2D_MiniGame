@@ -12,8 +12,17 @@ public class CameraComponent : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        target = FindFirstObjectByType<PlayerComponent>().transform;
-        if (target == null) Debug.Log("플레이어가 존재하지 않음");
+
+        if (GameManager.player != null)
+        {
+            target = GameManager.player.transform;
+        }
+
+        else
+        {
+            target = FindFirstObjectByType<PlayerComponent>().transform;
+            if (target == null) Debug.Log("플레이어가 존재하지 않음");
+        }
 
         size = new Vector2(17.78f, 10f);
         this.transform.position = target.transform.position;
@@ -26,13 +35,12 @@ public class CameraComponent : MonoBehaviour
         //내 위치 => 플레이어 위치 추적
         if (target != null)
         {
-            var thisPos = this.transform.position;
-            nextPos = Vector2.Lerp(thisPos, target.transform.position, 0.015f);
+            nextPos = Vector2.Lerp(this.transform.position, target.transform.position, 0.015f);
 
             //카메라 위치 + 카메라 사이즈
             var camSize = size * 0.5f;
             var posVal = nextPos + camSize;
-            var negVal = nextPos + (camSize * -1);
+            var negVal = nextPos - camSize;
 
             //맵 사이즈
             var posRange = range * 0.5f;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LoadComponent : MonoBehaviour
 {
@@ -6,5 +7,6 @@ public class LoadComponent : MonoBehaviour
     {
         GameManager.effect.Load();
         GameManager.sound.Load();
+        SceneManager.LoadScene("Loby");
     }
 }

@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class FlappyControll : MonoBehaviour,
-IGameEvent
+public class FlappyControll : MonoBehaviour
 {
     private bool isDead;
     private Rigidbody2D rigid;
@@ -11,10 +10,9 @@ IGameEvent
     {
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody2D>();
+        rigid.gravityScale = 0;
 
-        rigid.linearVelocity = Vector2.right * 6f;
-        rigid.linearVelocity += Vector2.up * 7f;
-
+        GameManager.gameEvent.Add(FlappyStart);
         GameManager.SetComponent(this);
     }
 
@@ -22,34 +20,35 @@ IGameEvent
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            if(!isDead) rigid.linearVelocity += Vector2.up * 5f;
+            if (!isDead) rigid.linearVelocity += Vector2.up * 5f;
         }
 
         this.transform.rotation = Quaternion.Euler(0, 0, rigid.linearVelocity.y * 5f);
     }
 
-    public void OnGameEvent()
+    private void FlappyStart()
     {
         isDead = false;
         anim.SetBool("Dead", isDead);
 
-        this.transform.position = new Vector3(this.transform.position.x, 2, 0);
-        rigid.linearVelocity += Vector2.up * 7f;
+        var setPos = this.transform.position;
+        setPos.y = 0;
+        this.transform.position = setPos;
+
+        rigid.gravityScale = 1.3f;
         rigid.linearVelocity = Vector2.right * 6f;
+        rigid.linearVelocity += Vector2.up * 7f;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Score"))
+        if (collision.gameObject.CompareTag("Wall"))
         {
-            //upScore
-        }
-
-        else if (collision.gameObject.CompareTag("Wall"))
-        {
-            //GameOver
             isDead = true;
             anim.SetBool("Dead", isDead);
+            rigid.linearVelocity = Vector3.zero;
+
+            GameManager.gameEvent.Call("FlappyOnMenu");
         }
     }
 }

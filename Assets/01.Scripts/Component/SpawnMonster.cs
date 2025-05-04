@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnMonster : MonoBehaviour,
-IGameEvent
+public class SpawnMonster : MonoBehaviour
 {
     [Header("풀링 카운트")]
     [SerializeField] private int spawnCount;
@@ -16,6 +15,7 @@ IGameEvent
     private void Start()
     {
         GameManager.SetComponent(this);
+        GameManager.gameEvent.Add(UpDifficulty, false);
 
         anim = GetComponent<Animator>();
         if (anim == null) Debug.Log($"{this.name}에 애니메이터가 존재하지 않음");
@@ -44,7 +44,7 @@ IGameEvent
         }
     }
 
-    public void OnGameEvent()
+    private void UpDifficulty()
     {
         stage += 0.2f;
         anim.SetFloat("Speed", stage);
