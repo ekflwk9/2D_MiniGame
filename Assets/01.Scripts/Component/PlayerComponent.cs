@@ -1,33 +1,40 @@
 using UnityEngine;
 
 public class PlayerComponent : MonoBehaviour,
-IAwake, IHit, IDestroy
+IHit
 {
     public int health { get; private set; } = 15;
-    private float moveSpeed = 300f;
+    private float moveSpeed = 3.5f;
 
     private Animator anim;
     private Rigidbody2D rigid;
+    private GameObject touchItem;
 
     private Vector3 effectDirection = Vector3.one;
     private Vector3 direction = Vector3.one;
-    private Vector3 pos;
 
-    public void OnAwake()
+    private void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
+        DontDestroyOnLoad(this.gameObject);
+        GameManager.gameEvent.Add(StopPlayer, true);
         GameManager.SetComponent(this);
     }
 
     private void Update()
     {
-        Move();
+        if (!GameManager.stopGame)
+        {
+            Move();
+            OnItem();
+        }
     }
 
     private void Move()
     {
+        var pos = this.transform.position;
         pos.x = 0f;
         pos.y = 0f;
 
@@ -43,7 +50,7 @@ IAwake, IHit, IDestroy
         if (pos != Vector3.zero) anim.SetBool("Move", true);
         else anim.SetBool("Move", false);
 
-        rigid.linearVelocity = pos.normalized * moveSpeed * Time.smoothDeltaTime;
+        rigid.linearVelocity = pos.normalized * moveSpeed;
     }
 
     public void Direction(bool _isLeft)
@@ -61,19 +68,65 @@ IAwake, IHit, IDestroy
         GameManager.sound.OnEffect("Walk");
     }
 
-    public void OnHit(int _dmg)
+    private void StopPlayer()
     {
-        health -= _dmg;
-
-        GameManager.sound.OnEffect("PlayerHit");
-        GameManager.effect.On(this.transform.position, EffectCode.Blood);
-        GameManager.cam.HitShake();
-
-        if (health <= 0) this.gameObject.SetActive(false); 
+        rigid.linearVelocity = Vector2.zero;
+        anim.SetBool("Move", false);
     }
 
-    public void OnDestroyHandler()
+    public void OnHit(int _dmg)
     {
-        DestroyImmediate(this.gameObject);
+        if (health > 0)
+        {
+            health -= _dmg;
+
+            GameManager.sound.OnEffect("PlayerHit");
+            GameManager.effect.On(this.transform.position, EffectCode.Blood);
+            GameManager.cam.HitShake();
+            GameManager.gameEvent.Call("SetHpSlider");
+
+            if (health <= 0)
+            {
+                GameManager.stopGame = true;
+                GameManager.fade.OnFade(FadeFunc, 0.3f);
+
+                this.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void OnItem()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (touchItem != null)
+            {
+                GameManager.gameEvent.Call(touchItem.name);
+                touchItem = null;
+            }
+        }
+    }
+
+    private void FadeFunc()
+    {
+        GameManager.ChangeScene("Loby");
+        GameManager.fade.OnFade();
+
+        health = 15;
+        anim.SetBool("Move", false);
+
+        GameManager.stopGame = false;
+        GameManager.player.transform.position = new Vector3(5, 7, 0);
+        GameManager.player.gameObject.SetActive(true);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item")) touchItem = collision.gameObject;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item")) touchItem = null;
     }
 }

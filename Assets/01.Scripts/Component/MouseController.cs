@@ -1,18 +1,17 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-public class MouseController : MonoBehaviour,
-IStart
+public class MouseController : MonoBehaviour
 {
     private Vector3 direction = Vector3.one;
     private Vector3 mousePos;
     private Transform target;
 
-    public void OnStart() => target = GameManager.player.transform;
+    private void Start() => target = GameManager.player.transform;
 
     private void Update()
     {
-        if (GameManager.player.health > 0)
+        if (!GameManager.stopGame)
         {
             MoveMouse();
             ClickDown();

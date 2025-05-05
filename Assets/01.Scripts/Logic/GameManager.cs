@@ -3,8 +3,10 @@ using UnityEngine.SceneManagement;
 
 public static class GameManager
 {
+    public static bool stopGame = false;
     public static PlayerComponent player { get; private set; }
     public static CameraComponent cam { get; private set; }
+    public static FadeComponent fade { get; private set; }
     public static Weapon weapon { get; private set; }
     public static SoundManager sound { get; private set; } = new SoundManager();
     public static EffectManager effect { get; private set; } = new EffectManager();
@@ -15,6 +17,7 @@ public static class GameManager
         if (_component is Weapon isWeapon) weapon = isWeapon;
         else if (_component is PlayerComponent isPlayer) player = isPlayer;
         else if (_component is CameraComponent isCam) cam = isCam;
+        else if (_component is FadeComponent isFade) fade = isFade;
 
         sound.SetComponent(_component);
         gameEvent.SetComponent(_component);
@@ -22,7 +25,16 @@ public static class GameManager
 
     public static void ChangeScene(string _sceneName)
     {
-        //gameEvent.Reset();
+        if (_sceneName == "LoadData")
+        {
+            Debug.Log("LoadData은 가면 안되는 씬입니다.");
+            return;
+        }
+
+        gameEvent.Reset();
+        gameEvent.SetComponent(player);
+        player.transform.position = Vector3.zero;
+
         SceneManager.LoadScene(_sceneName);
     }
 }

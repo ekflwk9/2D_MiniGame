@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Bow : Weapon
 {
@@ -8,9 +7,9 @@ public class Bow : Weapon
     public override int critical { get; protected set; } = 5;
     public override int dmg { get; protected set; } = 2;
 
-    public override void OnAwake()
+    protected override void Awake()
     {
-        base.OnAwake();
+        base.Awake();
 
         var arrow = Service.FindResource("Weapon", "Arrow");
         arrows = new Arrow[20];
@@ -28,14 +27,11 @@ public class Bow : Weapon
 
     public override void Ready()
     {
-
         anim.Play("Ready", -1, 0);
-
     }
 
     public override void Attack()
     {
-
         anim.Play("Attack", -1, 0);
 
         var target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -48,6 +44,5 @@ public class Bow : Weapon
                 break;
             }
         }
-
     }
 }

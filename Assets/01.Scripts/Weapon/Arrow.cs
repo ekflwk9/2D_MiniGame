@@ -1,8 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-public class Arrow : MonoBehaviour,
-IDestroy
+public class Arrow : MonoBehaviour
 {
     public bool isFire { get; private set; }
     private int dmg;
@@ -44,11 +43,6 @@ IDestroy
         //น฿ป็
         rigid.linearVelocity = _firePos.normalized * speed;
         isFire = true;
-    }
-
-    public void OnDestroyHandler()
-    {
-        DestroyImmediate(this.gameObject);
     }
 
     private void SetOff()
