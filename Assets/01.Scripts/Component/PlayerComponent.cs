@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class PlayerComponent : MonoBehaviour,
-IHit, IDestroy
+IHit
 {
     public int health { get; private set; } = 15;
     private float moveSpeed = 3.5f;
@@ -12,7 +12,6 @@ IHit, IDestroy
 
     private Vector3 effectDirection = Vector3.one;
     private Vector3 direction = Vector3.one;
-    private Vector3 pos;
 
     private void Awake()
     {
@@ -20,6 +19,7 @@ IHit, IDestroy
         anim = GetComponent<Animator>();
 
         DontDestroyOnLoad(this.gameObject);
+        GameManager.gameEvent.Add(StopPlayer, true);
         GameManager.SetComponent(this);
     }
 
@@ -34,6 +34,7 @@ IHit, IDestroy
 
     private void Move()
     {
+        var pos = this.transform.position;
         pos.x = 0f;
         pos.y = 0f;
 
@@ -67,24 +68,30 @@ IHit, IDestroy
         GameManager.sound.OnEffect("Walk");
     }
 
+    private void StopPlayer()
+    {
+        rigid.linearVelocity = Vector2.zero;
+        anim.SetBool("Move", false);
+    }
+
     public void OnHit(int _dmg)
     {
-        health -= _dmg;
-
-        GameManager.sound.OnEffect("PlayerHit");
-        GameManager.effect.On(this.transform.position, EffectCode.Blood);
-        GameManager.cam.HitShake();
-        GameManager.gameEvent.Call("SetHpSlider");
-
-        if (health <= 0)
+        if (health > 0)
         {
-            health = 15;
-            anim.SetBool("Move", false);
+            health -= _dmg;
 
-            GameManager.stopGame = true;
-            this.gameObject.SetActive(false);
+            GameManager.sound.OnEffect("PlayerHit");
+            GameManager.effect.On(this.transform.position, EffectCode.Blood);
+            GameManager.cam.HitShake();
+            GameManager.gameEvent.Call("SetHpSlider");
 
-            GameManager.fade.OnFade(FadeFunc, 0.3f);
+            if (health <= 0)
+            {
+                GameManager.stopGame = true;
+                GameManager.fade.OnFade(FadeFunc, 0.3f);
+
+                this.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -103,12 +110,14 @@ IHit, IDestroy
     private void FadeFunc()
     {
         GameManager.ChangeScene("Loby");
-        GameManager.stopGame = false;
-    }
+        GameManager.fade.OnFade();
 
-    public void OnDestroyHandler()
-    {
-        Destroy(this.gameObject);
+        health = 15;
+        anim.SetBool("Move", false);
+
+        GameManager.stopGame = false;
+        GameManager.player.transform.position = new Vector3(5, 7, 0);
+        GameManager.player.gameObject.SetActive(true);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

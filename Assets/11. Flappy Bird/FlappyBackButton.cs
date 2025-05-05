@@ -3,8 +3,17 @@ using UnityEngine.EventSystems;
 
 public class FlappyBackButton : UiButton
 {
-    public override void OnPointerClick(PointerEventData eventData)
+    protected override void Click()
     {
-        GameManager.ChangeScene("Dungeon");
+        GameManager.fade.OnFade(FadeFunc);
+    }
+
+    private void FadeFunc()
+    {
+        GameManager.ChangeScene("Loby");
+        GameManager.fade.OnFade();
+
+        GameManager.stopGame = false;
+        GameManager.player.transform.position = new Vector3(-5, 7, 0);
     }
 }

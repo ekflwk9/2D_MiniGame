@@ -19,7 +19,9 @@ public class FlappyLever : MonoBehaviour
     {
         offLever.SetActive(false);
         onLever.SetActive(true);
+        GameManager.gameEvent.Call("StopPlayer", true);
 
+        GameManager.stopGame = true;
         GameManager.sound.OnEffect("Lever");
         GameManager.fade.OnFade(FadeFunc);
     }
@@ -29,7 +31,6 @@ public class FlappyLever : MonoBehaviour
         GameManager.ChangeScene("Flappy");
         GameManager.sound.OnMusic(null);
 
-        GameManager.stopGame = true;
         GameManager.player.transform.position = Vector3.down * 1000;
         GameManager.fade.OnFade();
     }

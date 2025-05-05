@@ -17,9 +17,20 @@ IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
         if (button == null) Debug.Log($"{this.name}에 Text오브젝트가 없음");
     }
 
-    public abstract void OnPointerClick(PointerEventData eventData);
+    protected abstract void Click();
 
-    public void OnPointerEnter(PointerEventData eventData) => touchImage.SetActive(true);
+    public virtual void OnPointerClick(PointerEventData eventData)
+    {
+        if (!GameManager.fade.onFade) Click();
+    }
 
-    public void OnPointerExit(PointerEventData eventData) => touchImage.SetActive(false);
+    public virtual void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!GameManager.fade.onFade) touchImage.SetActive(true);
+    }
+
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
+        if (touchImage.activeSelf) touchImage.SetActive(false);
+    }
 }

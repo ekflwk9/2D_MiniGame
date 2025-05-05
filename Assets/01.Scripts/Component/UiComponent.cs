@@ -1,13 +1,10 @@
 using UnityEngine;
 
-public class UiComponent : MonoBehaviour,
-IDestroy
+public class UiComponent : MonoBehaviour
 {
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
         GameManager.SetComponent(this);
     }
-
-    public void OnDestroyHandler() => Destroy(this.gameObject);
 }

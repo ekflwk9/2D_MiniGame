@@ -25,18 +25,15 @@ public static class GameManager
 
     public static void ChangeScene(string _sceneName)
     {
-        if (_sceneName == "Loby")
+        if (_sceneName == "LoadData")
         {
-            gameEvent.Reset(true);
+            Debug.Log("LoadData은 가면 안되는 씬입니다.");
+            return;
         }
 
-        else
-        {
-            gameEvent.Reset(false);
-            gameEvent.SetComponent(player);
-
-            player.transform.position = Vector3.zero;
-        }
+        gameEvent.Reset();
+        gameEvent.SetComponent(player);
+        player.transform.position = Vector3.zero;
 
         SceneManager.LoadScene(_sceneName);
     }

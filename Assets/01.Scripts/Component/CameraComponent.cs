@@ -13,16 +13,8 @@ public class CameraComponent : MonoBehaviour
     {
         anim = GetComponent<Animator>();
 
-        if (GameManager.player != null)
-        {
-            target = GameManager.player.transform;
-        }
-
-        else
-        {
-            target = FindFirstObjectByType<PlayerComponent>().transform;
-            if (target == null) Debug.Log("플레이어가 존재하지 않음");
-        }
+        target = GameManager.player.transform;
+        if (target == null) Debug.Log("플레이어가 존재하지 않음");
 
         size = new Vector2(17.78f, 10f);
         this.transform.position = target.transform.position;

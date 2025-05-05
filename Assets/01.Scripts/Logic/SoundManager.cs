@@ -32,7 +32,8 @@ public class SoundManager
 
     public void OnMusic(string _soundName)
     {
-        if (sound.ContainsKey(_soundName)) music.On(sound[_soundName]);
-        else music.On(null);
+        if(string.IsNullOrEmpty(_soundName)) music.On(null);
+        else if (sound.ContainsKey(_soundName)) music.On(sound[_soundName]);
+        else Debug.Log($"{_soundName}은 Resources/Sound에 추가되지 않은 사운드");
     }
 }

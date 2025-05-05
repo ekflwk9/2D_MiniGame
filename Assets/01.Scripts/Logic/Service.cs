@@ -2,7 +2,6 @@ using UnityEngine;
 
 public delegate void Func();
 public interface IHit { public void OnHit(int _dmg); }
-public interface IDestroy { public void OnDestroyHandler(); }
 
 public class Service
 {

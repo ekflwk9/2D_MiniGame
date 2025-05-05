@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class EventManager
 {
-    private event Func destroy;
     private Dictionary<string, IHit> hit = new Dictionary<string, IHit>();
-
     private Dictionary<string, Func> gameEvent = new Dictionary<string, Func>();
     private Dictionary<string, Func> constEvent = new Dictionary<string, Func>();
 
@@ -15,24 +13,12 @@ public class EventManager
         {
             if (!hit.ContainsKey(_component.name)) hit.Add(_component.name, isHit);
         }
-
-        if (_component is IDestroy isDestroy)
-        {
-            destroy += isDestroy.OnDestroyHandler;
-        }
     }
 
-    public void Reset(bool _resetAll)
+    public void Reset()
     {
         hit.Clear();
         gameEvent.Clear();
-
-        if (_resetAll)
-        {
-            constEvent.Clear();
-            destroy?.Invoke();
-            destroy = null;
-        }
     }
 
     public void Add(Func _function, bool _constEvent = false)

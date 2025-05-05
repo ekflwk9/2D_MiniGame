@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class FlappyControll : MonoBehaviour
 {
-    private bool isDead;
+    private bool isDead = true;
     private Rigidbody2D rigid;
     private Animator anim;
 
